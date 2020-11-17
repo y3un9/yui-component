@@ -1,0 +1,6 @@
+{
+    "name": "HeaderFixedTable",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./HeaderFixedTable.js"
+}

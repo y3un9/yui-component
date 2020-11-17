@@ -1,0 +1,6 @@
+{
+    "name": "PageableTable",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./PageableTable.js"
+}
