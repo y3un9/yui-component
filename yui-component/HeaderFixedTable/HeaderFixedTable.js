@@ -4,7 +4,7 @@
  * @description 表头固定表格组件
  */
 
-import Table from './Table';
+import Table from '../Table';
 
 /**
  * @constructor 表头固定表格组件类

@@ -4,10 +4,10 @@
  * @description 表单组件
  */
 
-import Component from './Component';
+import Component from '../Component';
 
 /**
- * @constructor 表单组件类
+ * @constructor 表单
  * @extends Component
  * @param {string|HTMLElement} selector 
  */
@@ -27,10 +27,10 @@ function Form (selector) {
 Form.prototype = Object.create(Component.prototype);
 Form.prototype.constructor = Form;
 /**
- * @method 初始化组件
+ * 初始化组件
+ * @method init
  */
 Form.prototype.init = function () {
-    // console.log(this.constructor.name, arguments.callee.name);
     if (this.resetBtnElem) {
         this.resetBtnElem.addEventListener('click', this.handleResetBtnClick);
     }
@@ -39,34 +39,33 @@ Form.prototype.init = function () {
     }
 }
 /**
- * @method 重置表单
+ * 重置表单
+ * @method reset
  */
 Form.prototype.reset = function () {
-    // console.log(this.constructor.name, arguments.callee.name);
     this.formElem.reset();
 }
 /**
- * @method 提交表单
+ * 提交表单
+ * @method submit
  */
 Form.prototype.submit = function () {
-    // console.log(this.constructor.name, arguments.callee.name);
     // TODO: 需要在子类中重写submit方法
 }
 /**
- * @method 设置表单数据
+ * 设置表单数据
+ * @method setFormData
  * @param {Object} form_data 
  */
 Form.prototype.setFormData = function (form_data) {
-    // console.log(this.constructor.name, arguments.callee.name);
-    // console.log('form_data', form_data);
     // TODO: 遍历控件元素并赋值各种控件元素
 }
 /**
- * @method 获取表单数据
+ * 获取表单数据
+ * @method getFormData
  * @returns {Object}
  */
 Form.prototype.getFormData = function () {
-    // console.log(this.constructor.name, arguments.callee.name);
     var formData = new FormData(this.formElem);
     // console.log('formData', formData);
     var form_data = {};
@@ -79,23 +78,21 @@ Form.prototype.getFormData = function () {
     return form_data;
 }
 /**
- * @method 处理重置表单按钮click事件
+ * 处理重置按钮 click 事件
+ * @method handleResetBtnClick
  * @param {MouseEvent} e 
  */
 Form.prototype.handleResetBtnClick = function (e) {
-    // console.log(this.constructor.name, arguments.callee.name);
-    // console.log('e', e);
     // 取消默认动作
     e.preventDefault();
     this.reset();
 }
 /**
- * @method 处理提交表单按钮click事件
+ * 处理提交按钮 click 事件
+ * @method handleSubmitBtnClick
  * @param {MouseEvent} e 
  */
 Form.prototype.handleSubmitBtnClick = function (e) {
-    // console.log(this.constructor.name, arguments.callee.name);
-    // console.log('e', e);
     // 取消默认动作
     e.preventDefault();
     this.submit();

@@ -4,7 +4,7 @@
  * @description 确认框组件
  */
 
-import Dialog from './Dialog';
+import Dialog from '../Dialog';
 
 /**
  * @function confirmCallback

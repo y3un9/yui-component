@@ -4,7 +4,7 @@
  * @description 对话框组件
  */
 
-import Modal from './Modal';
+import Modal from '../Modal';
 
 /**
  * @constructor 对话框组件

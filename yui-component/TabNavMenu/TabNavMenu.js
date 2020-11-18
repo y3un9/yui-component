@@ -4,7 +4,8 @@
  * @description 标签导航菜单
  */
 
-import { Menu, MenuItem } from './Menu';
+// import { Menu, MenuItem } from './Menu';
+import Menu from './Menu';
 
 /**
  * 基本没用，还是要根据实际项目中用到的组件类去写

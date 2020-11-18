@@ -4,7 +4,7 @@
  * @description 表格组件
  */
 
-import Component from './Component';
+import Component from '../Component';
 
 /**
  * 表格列

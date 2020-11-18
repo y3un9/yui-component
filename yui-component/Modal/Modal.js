@@ -4,7 +4,7 @@
  * @description 模态框组件
  */
 
-import Component from './Component';
+import Component from '../Component';
 
 /**
  * @constructor 模态框组件

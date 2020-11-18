@@ -4,7 +4,7 @@
  * @description 菜单
  */
 
-import Component from './Component';
+import Component from '../Component';
 
 import util from '../../util';
 
@@ -181,7 +181,8 @@ Menu.prototype.render = function () {
     });
     this.rootElem.innerHTML = txt;
 };
-export {
-    MenuItem,
-    Menu
-};
+// export {
+//     MenuItem,
+//     Menu
+// };
+export default Menu;

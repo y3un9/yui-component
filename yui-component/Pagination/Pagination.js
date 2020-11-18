@@ -4,7 +4,7 @@
  * @description 分页组件
  */
 
-import Component from './Component';
+import Component from '../Component';
 
 /** @class 分页组件 */
 var Pagination = (function () {

@@ -4,7 +4,7 @@
  * @description 分页表格组件
  */
 
-import Table from './Table';
+import Table from '../Table';
 
 /** @class 分页表格组件类 */
 var PageableTable = (function () {
