@@ -14,8 +14,7 @@ import util from '../../util';
 /**
  * @typedef {Object} MenuItem
  * @property {string|number} key
- * @property {string} title
- * @property {Component} component
+ * @property {string} title 菜单项标题
  */
 
 /**
@@ -37,6 +36,10 @@ function Menu (selector) {
         menuData: []
     };
 
+    /** 菜单列表元素  */
+    this.listElem = this.rootElem;
+
+    // 触发事件绑定 this
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
     this.handleMenuItemAfterActive = this.handleMenuItemAfterActive.bind(this);
     this.handleMenuItemBeforeInactive = this.handleMenuItemBeforeInactive.bind(this);
@@ -47,23 +50,23 @@ Menu.prototype.constructor = Menu;
  * @method init
  */
 Menu.prototype.init = function () {
-    util.delegate(this.rootElem, 'click', `.${this.state.menuItemClassName}`, this.handleMenuItemClick);
-    util.delegate(this.rootElem, 'afteractive', `.${this.state.menuItemClassName}`, this.handleMenuItemAfterActive);
-    util.delegate(this.rootElem, 'beforeinactive', `.${this.state.menuItemClassName}`,  this.handleMenuItemBeforeInactive);
+    util.delegate(this.listElem, 'click', `.${this.state.menuItemClassName}`, this.handleMenuItemClick);
+    util.delegate(this.listElem, 'afteractive', `.${this.state.menuItemClassName}`, this.handleMenuItemAfterActive);
+    util.delegate(this.listElem, 'beforeinactive', `.${this.state.menuItemClassName}`,  this.handleMenuItemBeforeInactive);
 };
 /**
  * @method getMenuItemElems
  * @returns {NodeListOf<HTMLElement>}
  */
 Menu.prototype.getMenuItemElems = function () {
-    return this.rootElem.querySelectorAll(`.${this.state.menuItemClassName}`);
+    return this.listElem.querySelectorAll(`.${this.state.menuItemClassName}`);
 };
 /**
  * @method getActiveMenuItemElem
  * @returns {HTMLElement}
  */
 Menu.prototype.getActiveMenuItemElem = function () {
-    return this.rootElem.querySelector(`.${this.state.menuItemClassName}.${this.state.menuItemActiveClassName}`);
+    return this.listElem.querySelector(`.${this.state.menuItemClassName}.${this.state.menuItemActiveClassName}`);
 };
 /**
  * 需要 override
@@ -179,7 +182,7 @@ Menu.prototype.render = function () {
     this.state.menuData.forEach(function (item, index, array) {
         txt += self.renderMenuItem(item);
     });
-    this.rootElem.innerHTML = txt;
+    this.listElem.innerHTML = txt;
 };
 // export {
 //     MenuItem,
