@@ -6,7 +6,7 @@
 
 import Component from '../Component';
 
-import util from '../../util';
+import * as util from '../../../util';
 
 // 需要具备的能力和只应该具备这些能力
 // 使激活菜单项高亮
