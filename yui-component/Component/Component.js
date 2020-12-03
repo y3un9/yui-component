@@ -17,7 +17,7 @@ function Component (selector) {
     // 判断 selector 是 元素选择器字符串，还是 元素节点
     if (typeof selector === 'string') {
         this.rootElem = document.querySelector(selector);
-    } else if (selector.nodeType === Node.ELEMENT_NODE) {
+    } else if (selector && selector.nodeType === Node.ELEMENT_NODE) {
         this.rootElem = selector;
     }
 }
