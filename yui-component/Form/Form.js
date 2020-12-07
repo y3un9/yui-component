@@ -59,6 +59,20 @@ Form.prototype.submit = function () {
  */
 Form.prototype.setFormData = function (form_data) {
     // TODO: 遍历控件元素并赋值各种控件元素
+    // 目前支持的控件元素类型有：
+    // 1. Text Input
+    // 2. Number Input
+    // 3. Phone Input
+    // 4. Email Input
+    // 5. Password Input
+    // 6. Text Area
+    // 7. Switch Button
+    // 8. Number Stepper
+    // 9. Select
+    // 10. Radio Button
+    // 11. Checkbox Button
+    // 12. DatePicker（未完成）
+    // 13. DateTimerPicker（未完成）
 }
 /**
  * 获取表单数据

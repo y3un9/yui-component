@@ -8,7 +8,7 @@
 import Menu from './Menu';
 
 /**
- * 基本没用，还是要根据实际项目中用到的组件类去写
+ * 几乎不能直接使用，还是要根据实际项目中用到的组件类去写
  * @constructor 标签导航菜单
  * @extends Menu
  * @param {string|HTMLElement} selector 

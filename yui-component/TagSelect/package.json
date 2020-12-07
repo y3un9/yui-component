@@ -1,0 +1,6 @@
+{
+    "name": "TagSelect",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./TagSelect.js"
+}

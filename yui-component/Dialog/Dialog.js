@@ -11,7 +11,7 @@ import Modal from '../Modal';
  * @extends Modal
  * @param {string|HTMLElement} selector 
  */
-function Dialog (id) {
+function Dialog (selector) {
     Modal.call(this, selector);
 }
 Dialog.prototype = Object.create(Modal.prototype);

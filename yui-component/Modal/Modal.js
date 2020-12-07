@@ -13,6 +13,9 @@ import Component from '../Component';
  */
 function Modal (selector) {
     Component.call(this, selector);
+
+    /** 模态框打开时文档 body 元素的 CSS 类名 */
+    this.modalOpenedBodyClassName = 'modal-open';
 }
 Modal.prototype = Object.create(Component.prototype);
 Modal.prototype.constructor = Modal;
@@ -20,14 +23,14 @@ Modal.prototype.constructor = Modal;
  * @method hide
  */
 Modal.prototype.hide = function () {
-    document.body.classList.remove('modal-open');
+    document.body.classList.remove(this.modalOpenedBodyClassName);
     this.rootElem.style.display = 'none';
 };
 /**
  * @method show
  */
 Modal.prototype.show = function () {
-    document.body.classList.add('modal-open');
+    document.body.classList.add(this.modalOpenedBodyClassName);
     this.rootElem.style.display = 'block';
 };
 export default Modal;
