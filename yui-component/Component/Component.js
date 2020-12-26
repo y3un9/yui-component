@@ -32,6 +32,9 @@ Component.prototype.constructor = Component;
 Component.prototype.setState = function (newState) {
     // console.log(this.constructor.name, arguments.callee.name);
     // console.log('newState', newState);
+    if (!newState || typeof newState !== 'object') {
+        return;
+    }
     var oldState = this.state;
     Object.keys(newState).forEach(function (key) {
         if (oldState.hasOwnProperty(key)) {
