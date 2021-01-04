@@ -52,6 +52,9 @@ Table.prototype.init = function () {
 Table.prototype.setTableColumn = function (column_data) {
     // console.log(this.constructor.name, arguments.callee.name);
     // console.log('column_data', column_data);
+    if (!Array.isArray(column_data)) {
+        column_data = [];
+    }
     this.setState({
         columnData: column_data
     });
@@ -63,6 +66,9 @@ Table.prototype.setTableColumn = function (column_data) {
 Table.prototype.setTableData = function (table_data) {
     // console.log(this.constructor.name, arguments.callee.name);
     // console.log('table_data', table_data);
+    if (!Array.isArray(table_data)) {
+        table_data = [];
+    }
     this.setState({
         tableData: table_data
     });
