@@ -1,0 +1,131 @@
+/* Created by SubwaySamurai on 2021/03/01 */
+
+.descriptions {
+    color: rgba(0,0,0,.65);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.descriptions-title {
+    margin-bottom: 20px;
+    color: rgba(0,0,0,.85);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.descriptions-list {
+    width: 100%;
+    overflow: hidden;
+}
+
+.descriptions-row {
+    
+}
+
+.descriptions-item > span {
+    display: inline-block;
+}
+
+.descriptions-item-label {
+    color: rgba(0,0,0,.85);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+.descriptions-item-content {
+    color: rgba(0,0,0,.65);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+.descriptions-item-label::after {
+    content: "";
+    position: relative;
+    /* top: -0.5px; */
+    margin-left: 2px;
+    margin-right: 8px;
+}
+.descriptions-item-colon::after {
+    content: ":";
+}
+
+/* size default, borderless */
+.descriptions-list table {
+    table-layout: fixed;
+    width: 100%;
+    border-radius: 4px;
+}
+.descriptions-list .descriptions-row {
+
+}
+.descriptions-list .descriptions-row > th,
+.descriptions-list .descriptions-row > td {
+    padding-bottom: 16px;
+}
+
+/* size middle, borderless */
+.descriptions-middle {
+
+}
+.descriptions-middle .descriptions-item-label,
+.descriptions-middle .descriptions-item-content {
+
+}
+.descriptions-middle .descriptions-row > th,
+.descriptions-middle .descriptions-row > td {
+    padding-bottom: 12px;
+}
+
+/* size small, borderless */
+.descriptions-small {
+
+}
+.descriptions-small .descriptions-item-label,
+.descriptions-small .descriptions-item-content {
+
+}
+.descriptions-small .descriptions-row > th,
+.descriptions-small .descriptions-row > td {
+    padding-bottom: 8px;
+}
+
+/* bordered, size default */
+.descriptions-list table.descriptions-bordered {
+    table-layout: auto;
+}
+.descriptions-bordered {
+    border: 1px solid #e8e8e8;
+}
+.descriptions-bordered .descriptions-row {
+    border-bottom: 1px solid #e8e8e8;
+}
+.descriptions-bordered .descriptions-row:last-child {
+    border-bottom: none;
+}
+.descriptions-bordered .descriptions-item-label,
+.descriptions-bordered .descriptions-item-content {
+    padding: 16px 24px;
+    border-right: 1px solid #e8e8e8;
+}
+.descriptions-bordered .descriptions-item-label:last-child,
+.descriptions-bordered .descriptions-item-content:last-child {
+    border-right: none;
+}
+.descriptions-bordered .descriptions-item-label {
+    background-color: #fafafa;
+}
+.descriptions-bordered .descriptions-item-content {
+    
+}
+/* bordered, size middle */
+.descriptions-bordered.descriptions-middle .descriptions-item-label,
+.descriptions-bordered.descriptions-middle .descriptions-item-content {
+    padding: 12px 24px;
+}
+/* bordered, szie small */
+.descriptions-bordered.descriptions-small .descriptions-item-label,
+.descriptions-bordered.descriptions-small .descriptions-item-content {
+    padding: 8px 12px;
+}

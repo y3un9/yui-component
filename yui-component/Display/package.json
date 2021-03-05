@@ -1,0 +1,6 @@
+{
+    "name": "Display",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./Display.js"
+}

@@ -1,0 +1,24 @@
+/* Created by SubwaySamurai on 2021/03/05 */
+
+.fixed-table {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.fixed-table .head-table-wrapper {
+    
+}
+
+.fixed-table .body-table-wrapper {
+    flex: 1;
+    height: 0;
+    overflow: auto;
+}
+
+.fixed-table .head-table-wrapper table,
+.fixed-table .body-table-wrapper table {
+    table-layout: fixed;
+}
+
