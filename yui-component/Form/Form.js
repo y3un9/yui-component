@@ -4,6 +4,7 @@
  * @description 表单组件
  */
 
+import util from '../../../util';
 import Component from '../Component';
 
 /**
@@ -13,6 +14,11 @@ import Component from '../Component';
  */
 function Form (selector) {
     Component.call(this, selector);
+    
+    this.state = {
+        formConfig: [],
+        formData: {}
+    };
 
     /** @type {HTMLFormElement} */
     this.formElem = this.rootElem;
@@ -21,22 +27,28 @@ function Form (selector) {
     /** @type {HTMLButtonElement} */
     this.submitBtnElem = null;
 
+    this.handleFormLabelClick = this.handleFormLabelClick.bind(this);
     this.handleResetBtnClick = this.handleResetBtnClick.bind(this);
     this.handleSubmitBtnClick = this.handleSubmitBtnClick.bind(this);
 }
 Form.prototype = Object.create(Component.prototype);
 Form.prototype.constructor = Form;
 /**
+ * @method create
+ */
+Form.prototype.create = function () {
+    
+}
+/**
  * 初始化组件
  * @method init
  */
 Form.prototype.init = function () {
-    if (this.resetBtnElem) {
-        this.resetBtnElem.addEventListener('click', this.handleResetBtnClick);
-    }
-    if (this.submitBtnElem) {
-        this.submitBtnElem.addEventListener('click', this.handleSubmitBtnClick);
-    }
+    // 元素事件绑定
+    util.delegate(this.formElem, 'click', 'label[for="*"]', this.handleFormLabelClick);
+    util.delegate(this.formElem, 'click', 'button[type="reset"]', this.handleResetBtnClick);
+    util.delegate(this.formElem, 'click', 'button[type="submit"]', this.handleSubmitBtnClick);
+    // 子组件初始化
 }
 /**
  * 重置表单
@@ -90,13 +102,39 @@ Form.prototype.getFormData = function () {
     }
     // console.log('form_data', form_data);
     return form_data;
+
+    var formData = {};
+    var formConfig = this.state.formConfig;
+    formConfig.forEach(function (item, index, array) {
+        
+    });
+    console.log('formData', formData);
+    return formData;
+}
+/**
+ * 处理表单标签 click 事件
+ * @method handleFormLabelClick
+ * @param {MouseEvent} e 
+ * @param {HTMLElement} elem 
+ */
+Form.prototype.handleFormLabelClick = function (e, elem) {
+    var formControlName = elem.getAttribute('for');
+    if (formControlName === '') {
+        return;
+    }
+    var formControlElements = this.formElem.querySelectorAll(`[name="${formControlName}"]`);
+    if (formControlElements.length === 0) {
+        return;
+    }
+    formControlElements[0].focus();
 }
 /**
  * 处理重置按钮 click 事件
  * @method handleResetBtnClick
  * @param {MouseEvent} e 
+ * @param {HTMLElement} elem
  */
-Form.prototype.handleResetBtnClick = function (e) {
+Form.prototype.handleResetBtnClick = function (e, elem) {
     // 取消默认动作
     e.preventDefault();
     this.reset();
@@ -105,8 +143,9 @@ Form.prototype.handleResetBtnClick = function (e) {
  * 处理提交按钮 click 事件
  * @method handleSubmitBtnClick
  * @param {MouseEvent} e 
+ * @param {HTMLElement} elem
  */
-Form.prototype.handleSubmitBtnClick = function (e) {
+Form.prototype.handleSubmitBtnClick = function (e, elem) {
     // 取消默认动作
     e.preventDefault();
     this.submit();
