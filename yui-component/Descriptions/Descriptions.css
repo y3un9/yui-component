@@ -93,7 +93,7 @@
 
 /* bordered, size default */
 .descriptions-list table.descriptions-bordered {
-    table-layout: auto;
+    /* table-layout: auto; */
 }
 .descriptions-bordered {
     border: 1px solid #e8e8e8;
