@@ -69,6 +69,76 @@ Menu.prototype.getActiveMenuItemElem = function () {
     return this.listElem.querySelector(`.${this.state.menuItemClassName}.${this.state.menuItemActiveClassName}`);
 };
 /**
+ * @method selectMenuByKey
+ * @param {string} key 
+ */
+Menu.prototype.selectMenuByKey = function (key) {
+    var self = this;
+    // get target menu item
+    var targetItem = util.getTargetItemFromArrayByKey(this.state.menuData, key, 'key');
+    if (!targetItem) {
+        return;
+    }
+    // check if target menu elem exist
+    var menu_item_elems = this.getMenuItemElems();
+    var target_elem = Array.prototype.filter.call(menu_item_elems, function (elem, index, array) {
+        return elem.getAttribute('data-key') === targetItem.key;
+    })[0];
+    if (!target_elem) {
+        return;
+    }
+    // 判断事件触发元素是否被禁用
+    if (target_elem.classList.contains(this.state.menuItemDisabledClassName)) {
+        return;
+    }
+    // 判断事件触发元素是否已激活
+    if (target_elem.classList.contains(this.state.menuItemActiveClassName)) {
+        return;
+    }
+    // dispatch menu elem event
+    Array.prototype.forEach.call(menu_item_elems, function (elem, index, array) {
+        // // 判断当前菜单项元素是不是目标元素
+        // if (elem !== target_elem) {
+        //     elem.classList.remove(self.state.menuItemActiveClassName);
+        //     return;
+        // }
+        // elem.classList.add(self.state.menuItemActiveClassName);
+        // // 做一些菜单项激活后要做的事情和取消激活后要做的事情
+        // self.state.menuData.forEach(function (item, index, array) {
+        //     // 判断菜单项数据是不是与目标元素对应
+        //     if (item.key === elem.getAttribute('data-key')) {
+        //         self.handleMenuItemActive(item);
+        //     } else {
+        //         self.handleMenuItemInactive(item);
+        //     }
+        // });
+
+        // 尝试使用事件分发以转移逻辑与增强灵活性
+        // 判断当前菜单项元素是不是目标元素
+        if (elem === target_elem) {
+            // show menu elem
+            elem.classList.add(self.state.menuItemActiveClassName);
+            // dispatch afteractive event
+            elem.dispatchEvent(new Event('afteractive', {
+                bubbles: true,
+                cancelable: false,
+                composed: true
+            }));
+        } else {
+            // hide menu elem
+            elem.classList.remove(self.state.menuItemActiveClassName);
+            if (elem.classList.contains(self.state.menuItemActiveClassName)) {
+                // dispatch beforeinactive event
+                elem.dispatchEvent(new Event('beforeinactive', {
+                    bubbles: true,
+                    cancelable: false,
+                    composed: true
+                }));
+            }
+        }
+    });
+}
+/**
  * 需要 override
  * @method afterMenuItemActive
  * @param {MenuItem} item 
@@ -115,54 +185,7 @@ Menu.prototype.handleMenuItemBeforeInactive = function (e, elem) {
  * @param {HTMLElement} elem 
  */
 Menu.prototype.handleMenuItemClick = function (e, elem) {
-    var target_elem = elem;
-    // 判断事件触发元素是否被禁用
-    if (target_elem.classList.contains(this.state.menuItemDisabledClassName)) {
-        return;
-    }
-    // 判断事件触发元素是否已激活
-    if (target_elem.classList.contains(this.state.menuItemActiveClassName)) {
-        return;
-    }
-    var menu_item_elems = this.getMenuItemElems();
-    var self = this;
-    Array.prototype.forEach.call(menu_item_elems, function (elem, index, array) {
-        // // 判断当前菜单项元素是不是目标元素
-        // if (elem !== target_elem) {
-        //     elem.classList.remove(self.state.menuItemActiveClassName);
-        //     return;
-        // }
-        // elem.classList.add(self.state.menuItemActiveClassName);
-        // // 做一些菜单项激活后要做的事情和取消激活后要做的事情
-        // self.state.menuData.forEach(function (item, index, array) {
-        //     // 判断菜单项数据是不是与目标元素对应
-        //     if (item.key === elem.getAttribute('data-key')) {
-        //         self.handleMenuItemActive(item);
-        //     } else {
-        //         self.handleMenuItemInactive(item);
-        //     }
-        // });
-
-        // 尝试使用事件分发以转移逻辑与增强灵活性
-        // 判断当前菜单项元素是不是目标元素
-        if (elem === target_elem) {
-            elem.classList.add(self.state.menuItemActiveClassName);
-            elem.dispatchEvent(new Event('afteractive', {
-                bubbles: true,
-                cancelable: false,
-                composed: true
-            }));
-        } else {
-            if (elem.classList.contains(self.state.menuItemActiveClassName)) {
-                elem.dispatchEvent(new Event('beforeinactive', {
-                    bubbles: true,
-                    cancelable: false,
-                    composed: true
-                }));
-            }
-            elem.classList.remove(self.state.menuItemActiveClassName);
-        }
-    });
+    this.selectMenuByKey(elem.getAttribute('data-key'));
 };
 /**
  * 需要 override
@@ -184,8 +207,4 @@ Menu.prototype.render = function () {
     });
     this.listElem.innerHTML = txt;
 };
-// export {
-//     MenuItem,
-//     Menu
-// };
 export default Menu;
