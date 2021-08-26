@@ -156,7 +156,7 @@ function Form (selector) {
     
     this.state = {
         /** @type {Array<FormItem>} */
-        formConfig: [],
+        formConfigs: [],
         formData: {},
         explainRequiredTextSuffix: '不能为空',
         explainRequiredInputTextPrefix: '请填写',
@@ -212,7 +212,6 @@ function Form (selector) {
     this.handleTransferListSelectedSelectItemCheckboxChange = this.handleTransferListSelectedSelectItemCheckboxChange.bind(this);
     this.handleTransferListAllSelectAllCheckboxChange = this.handleTransferListAllSelectAllCheckboxChange.bind(this);
     this.handleTransferListSelectedSelectAllCheckboxChange = this.handleTransferListSelectedSelectAllCheckboxChange.bind(this);
-
 }
 Form.prototype = Object.create(Component.prototype);
 Form.prototype.constructor = Form;
@@ -227,11 +226,11 @@ Form.prototype.create = function () {
     var template = '';
     this.formElem.innerHTML = template;
     // 判断表单数据合理性
-    if (!Array.isArray(this.state.formConfig)) {
+    if (!Array.isArray(this.state.formConfigs)) {
         return;
     }
     // 进行表单模板创建
-    template = this.state.formConfig.reduce(util.makeReduceCallbackStringConcat(this.renderFormItem.bind(this)), '');
+    template = this.state.formConfigs.reduce(util.makeReduceCallbackStringConcat(this.renderFormItem.bind(this)), '');
     this.formElem.innerHTML = template;
 }
 /**
@@ -285,7 +284,7 @@ Form.prototype.init = function () {
 Form.prototype.initDatePicker = function () {
     var self = this;
     // find all DatePicker form control initialize bootstrap datetimepicker
-    this.state.formConfig.forEach(function (item, index, array) {
+    this.state.formConfigs.forEach(function (item, index, array) {
         if (item.type !== 'DatePicker') {
             return;
         }
@@ -316,7 +315,7 @@ Form.prototype.initDatePicker = function () {
         });
         dtPicker.on('changeDate', self.handleDatePickerChange);
         self.setState({
-            formConfig: [].concat(
+            formConfigs: [].concat(
                 array.slice(0, index),
                 Object.assign({}, item, {
                     instance: dtPicker
@@ -338,7 +337,7 @@ Form.prototype.initTimePicker = function () {
 Form.prototype.initDateTimePicker = function () {
     var self = this;
     // find all DateTimePicker form control initialize bootstrap datetimepicker
-    this.state.formConfig.forEach(function (item, index, array) {
+    this.state.formConfigs.forEach(function (item, index, array) {
         if (item.type !== 'DateTimePicker') {
             return;
         }
@@ -369,7 +368,7 @@ Form.prototype.initDateTimePicker = function () {
         });
         dtPicker.on('changeDate', self.handleDateTimePickerChange);
         self.setState({
-            formConfig: [].concat(
+            formConfigs: [].concat(
                 array.slice(0, index),
                 Object.assign({}, item, {
                     instance: dtPicker
@@ -385,7 +384,7 @@ Form.prototype.initDateTimePicker = function () {
 Form.prototype.initTransfer = function () {
     var self = this;
     // find all Transfer formConfigItem
-    var formConfigItemsTransfer = this.state.formConfig.filter(function (item, index, array) {
+    var formConfigItemsTransfer = this.state.formConfigs.filter(function (item, index, array) {
         return item.type === 'Transfer';
     });
     // bind Transfer event listen handler to wrapper elem
@@ -407,7 +406,7 @@ Form.prototype.initTransfer = function () {
 Form.prototype.reset = function () {
     this.formElem.reset();
 
-    this.setFormData(this.state.formConfig.reduce(function (previous, item, index, array) {
+    this.setFormData(this.state.formConfigs.reduce(function (previous, item, index, array) {
         var value = '';
         // if (item.hasOwnProperty('value')) {
         //     value = item['value'];
@@ -433,12 +432,17 @@ Form.prototype.submit = function () {
  * @returns {boolean}
  */
 Form.prototype.validate = function () {
+    // if (!Array.isArray(this.state.formConfigs)) {
+    //     return true;
+    // }
+    // return this.state.formConfigs.every(this.validateFormItem.bind(this));
+
     var self = this;
-    if (!Array.isArray(this.state.formConfig)) {
+    if (!Array.isArray(this.state.formConfigs)) {
         return true;
     }
     var formData = this.getFormData();
-    return this.state.formConfig.every(function (item, index, array) {
+    return this.state.formConfigs.every(function (item, index, array) {
         return self.validateFormItem.call(self, item, formData);
     });
 }
@@ -544,7 +548,7 @@ Form.prototype.setFormData = function (data) {
 
     var self = this;
     Object.keys(data).forEach(function (key, index, array) {
-        var targetConfig = util.getTargetItemFromArrayByKey(self.state.formConfig, key, 'key');
+        var targetConfig = util.getTargetItemFromArrayByKey(self.state.formConfigs, key, 'key');
         // console.log('targetConfig', targetConfig);
         if (!targetConfig) {
             return;
@@ -575,7 +579,7 @@ Form.prototype.getFormData = function () {
     // return formData;
 
     var self = this;
-    var formData = this.state.formConfig.reduce(function (total, item, index, array) {
+    var formData = this.state.formConfigs.reduce(function (total, item, index, array) {
         var formItemKey = item.key;
         var formItemType = item.type;
         var getterFunc = (
@@ -676,7 +680,7 @@ Form.prototype.handleSubmitBtnClick = function (e, elem) {
 Form.prototype.handleTextInputChange = function (e, elem) {
     // console.log('handleTextInputChange', e, elem);
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -710,7 +714,7 @@ Form.prototype.handleTextInputChange = function (e, elem) {
 Form.prototype.handleNumberInputChange = function (e, elem) {
     // console.log('handleNumberInputChange', e, elem);
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -744,7 +748,7 @@ Form.prototype.handleNumberInputChange = function (e, elem) {
 Form.prototype.handlePhoneInputChange = function (e, elem) {
     console.log('handlePhoneInputChange', e, e.target.value, elem);
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -778,7 +782,7 @@ Form.prototype.handlePhoneInputChange = function (e, elem) {
 Form.prototype.handleEmailInputChange = function (e, elem) {
     // console.log('handleEmailInputChange', e, elem);
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -812,7 +816,7 @@ Form.prototype.handleEmailInputChange = function (e, elem) {
 Form.prototype.handlePasswordInputChange = function (e, elem) {
     // console.log('handlePasswordInputChange', e, elem);
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -847,7 +851,7 @@ Form.prototype.handleTextAreaChange = function (e, elem) {
     // console.log('handleTextAreaChange', e, elem);
 
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -919,7 +923,7 @@ Form.prototype.handleSliderInput = function (e, elem) {
     // console.log('handleSliderInput', e, elem);
 
     var formControlName = elem.name;
-    var formConfigItem = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var formConfigItem = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!formConfigItem) {
         return;
     }
@@ -965,7 +969,7 @@ Form.prototype.handleSliderChange = function (e, elem) {
     // console.log('handleSliderChange', e, elem);
     
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -997,7 +1001,7 @@ Form.prototype.handleSelectChange = function (e, elem) {
     // console.log('handleSelectChange', e, elem);
 
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1009,13 +1013,16 @@ Form.prototype.handleSelectChange = function (e, elem) {
         e.target.value,
         'value'
     );
-    if (
-        !targetOptionData
-        // when select empty option, still trigger formItemChange method
-        && e.target.value !== ''
-    ) {
-        return;
-    }
+
+    // // @deprecated This will cause "handleFormItemChange" silent when Select was set null/undefined/''
+    // if (
+    //     !targetOptionData
+    //     // when select empty option, still trigger formItemChange method
+    //     && e.target.value !== ''
+    // ) {
+    //     return;
+    // }
+
     // var formData = this.getFormData();
     // if (targetOptionData.value === formData[formControlName]) {
     //     return;
@@ -1052,7 +1059,7 @@ Form.prototype.handleRadioChange = function (e, elem) {
     // console.log('handleRadioChange', e, elem);
 
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1095,7 +1102,7 @@ Form.prototype.handleCheckboxChange = function (e, elem) {
     // console.log('handleCheckboxChange', e, elem);
 
     var formControlName = elem.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1137,7 +1144,7 @@ Form.prototype.handleDatePickerChange = function (e) {
     // console.log('handleDatePickerChange', e);
 
     var formControlName = e.target.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1171,7 +1178,7 @@ Form.prototype.handleTimePickerChange = function (e) {
     // console.log('handleTimePickerChange', e);
 
     var formControlName = e.target.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1205,7 +1212,7 @@ Form.prototype.handleDateTimePickerChange = function (e) {
     // console.log('handleDateTimePickerChange', e);
 
     var formControlName = e.target.name;
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formControlName, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formControlName, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1251,7 +1258,7 @@ Form.prototype.handleTransferSelectItemBtnClick = function (e, elem) {
     }
     // get corresponding form config item
     var formKey = transferWrapperElem.getAttribute('data-name');
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formKey, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formKey, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1341,7 +1348,7 @@ Form.prototype.handleTransferUnselectItemBtnClick = function (e, elem) {
     }
     // get corresponding form config item
     var formKey = transferWrapperElem.getAttribute('data-name');
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formKey, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formKey, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1431,7 +1438,7 @@ Form.prototype.handleTransferSelectAllItemBtnClick = function (e, elem) {
     }
     // get corresponding form config item
     var formKey = transferWrapperElem.getAttribute('data-name');
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formKey, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formKey, 'key');
     if (!targetConfig) {
         return;
     }
@@ -1520,7 +1527,7 @@ Form.prototype.handleTransferUnselectAllItemBtnClick = function (e, elem) {
     }
     // get corresponding form config item
     var formKey = transferWrapperElem.getAttribute('data-name');
-    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfig, formKey, 'key');
+    var targetConfig = util.getTargetItemFromArrayByKey(this.state.formConfigs, formKey, 'key');
     if (!targetConfig) {
         return;
     }

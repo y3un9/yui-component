@@ -432,7 +432,20 @@ function renderSelect (data) {
         empty_value: '',
         empty_text: (data.option || {}).placeholder || '',
         options_data: (data.option || {}).options || [],
-        select_value: data.value || data.default || null,
+        // select_value: data.value || data.default || null,
+        select_value: (
+            typeof data.value === 'number'
+                ? data.value
+                : (
+                    data.value || (
+                        typeof data.default === 'number'
+                            ? data.default
+                            : (
+                                data.default || null
+                            )
+                    )
+                )
+        ),
         hide_empty: (data.option || {}).hidePlaceholder
     });
     return select_elem.parentElement.innerHTML;
@@ -444,39 +457,84 @@ function renderSelect (data) {
  * @returns {string}
  */
 function renderRadio (data) {
-    var template = `
-        <div class="radio-group">
-            ${((data.option || {}).options || []).reduce(function (total, item, index, array) {
-                return total.concat(`
-                    <label class="radio-wrapper" title="${item.description || ''}">
-                        <input
-                            class="radio-input"
-                            name="${data.key}"
-                            type="radio"
-                            value="${item.value}"
-                            ${(function () {
-                                if (data.default === item.value) {
-                                    return 'checked';
-                                } else {
-                                    return '';
-                                }
-                            }())}
-                            ${(function () {
-                                if (item.disabled) {
-                                    return 'disabled';
-                                } else {
-                                    return '';
-                                }
-                            }())}
-                        />
-                        <span class="radio-label">
-                            ${item.text}
-                        </span>
-                    </label>
-                `);
-            }, '')}
-        </div>
-    `;
+    var template = '';
+    if ((data.option || {}).layout === 'horizontal') {
+        template += `
+            <div class="radio-group" data-name="${data.key}">
+                ${((data.option || {}).options || []).reduce(function (total, item, index, array) {
+                    return total.concat(`
+                        <label class="radio-wrapper" title="${item.description || ''}">
+                            <input
+                                class="radio-input"
+                                name="${data.key}"
+                                type="radio"
+                                value="${item.value}"
+                                ${(function () {
+                                    if (data.default === item.value) {
+                                        return 'checked';
+                                    } else {
+                                        return '';
+                                    }
+                                }())}
+                                ${(function () {
+                                    if (
+                                        data.disabled
+                                        || item.disabled
+                                    ) {
+                                        return 'disabled';
+                                    } else {
+                                        return '';
+                                    }
+                                }())}
+                            />
+                            <span class="radio-label">
+                                ${item.text}
+                            </span>
+                        </label>
+                    `);
+                }, '')}
+            </div>
+        `;
+    } else {
+        template += `
+            <div class="radio-list" data-name="${data.key}">
+                ${((data.option || {}).options || []).reduce(function (total, item, index, array) {
+                    return total.concat(`
+                        <div class="radio-list-item" title="${item.description || ''}">
+                            <label class="radio-wrapper">
+                                <input
+                                    class="radio-input"
+                                    name="${data.key}"
+                                    type="radio"
+                                    value="${item.value}"
+                                    ${(function () {
+                                        if (data.default === item.value) {
+                                            return 'checked';
+                                        } else {
+                                            return '';
+                                        }
+                                    }())}
+                                    ${(function () {
+                                        if (
+                                            data.disabled
+                                            || item.disabled
+                                        ) {
+                                            return 'disabled';
+                                        } else {
+                                            return '';
+                                        }
+                                    }())}
+                                />
+                                <span class="radio-label">
+                                    ${item.text}
+                                </span>
+                            </label>
+                        </div>
+                    `);
+                }, '')}
+            </div>
+        `;
+    }
     return template;
 }
 /**
@@ -489,7 +547,7 @@ function renderCheckbox (data) {
     var template = '';
     if ((data.option || {}).layout === 'horizontal') {
         template += `
-            <div class="checkbox-group">
+            <div class="checkbox-group" data-name="${data.key}">
                 ${((data.option || {}).options || []).reduce(function (total, item, index, array) {
                     return total.concat(`
                         <label class="checkbox-wrapper" title="${item.description || ''}">
@@ -509,7 +567,10 @@ function renderCheckbox (data) {
                                     }
                                 }())}
                                 ${(function () {
-                                    if (item.disabled) {
+                                    if (
+                                        data.disabled
+                                        || item.disabled
+                                    ) {
                                         return 'disabled';
                                     } else {
                                         return '';
@@ -526,7 +587,7 @@ function renderCheckbox (data) {
         `;
     } else {
         template += `
-            <div class="checkbox-list">
+            <div class="checkbox-list" data-name="${data.key}">
                 ${((data.option || {}).options || []).reduce(function (total, item, index, array) {
                     return total.concat(`
                         <div class="checkbox-list-item" title="${item.description || ''}">
@@ -547,7 +608,10 @@ function renderCheckbox (data) {
                                         }
                                     }())}
                                     ${(function () {
-                                        if (item.disabled) {
+                                        if (
+                                            data.disabled
+                                            || item.disabled
+                                        ) {
                                             return 'disabled';
                                         } else {
                                             return '';

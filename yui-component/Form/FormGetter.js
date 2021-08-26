@@ -151,6 +151,20 @@ function getSelect (formConfigItem) {
     if (!targetOptionData) {
         return '';
     }
+
+    // Again find target option to avoid if select int 0, last targetOptionData might be empty option null or ''
+    if (typeof targetOptionData.value === 'number') {
+        targetOptionData = util.getTargetItemFromArrayByKey(
+            formConfigItem.option.options, 
+            Number.parseFloat(targetOptionElem.value), 
+            'value',
+            true
+        );
+        if (!targetOptionData) {
+            return '';
+        }
+    }
+
     console.log('targetOptionData', targetOptionData, targetOptionData.value);
     return targetOptionData.value;
 }
