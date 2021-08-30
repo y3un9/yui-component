@@ -164,6 +164,8 @@ function renderEmailInput (data) {
             name="${data.key}"
             type="text"
             value="${data.value || ''}"
+            minlength="${(data.option || {}).minLength || ''}"
+            maxlength="${(data.option || {}).maxLength || ''}"
             placeholder="${(data.option || {}).placeholder || data.title || ''}"
             autocomplete="off"
             ${data.disabled ? 'disabled' : ''}
@@ -184,6 +186,8 @@ function renderPasswordInput (data) {
             name="${data.key}"
             type="password"
             value="${data.value || ''}"
+            minlength="${(data.option || {}).minLength || ''}"
+            maxlength="${(data.option || {}).maxLength || ''}"
             placeholder="${(data.option || {}).placeholder || data.title || ''}"
             autocomplete="off"
             ${data.disabled ? 'disabled' : ''}

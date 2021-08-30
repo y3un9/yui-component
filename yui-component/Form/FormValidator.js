@@ -270,6 +270,37 @@ function validateEmailInput (formConfigItem, value) {
         return true;
     }
 
+    // 当 required == false 时, 用户可以不输入值, 这个是合理的, 但是校验函数还是去做了长度的校验, 也就会造成校验不通过, 这个是错误的
+    // 加一个判断值长度的逻辑, 当 required == false && value.length == 0 时, 不做长度的校验, 返回校验成功的结果
+    if (!formConfigItem.required && value.length === 0) {
+        return true;
+    }
+
+    // 检查是否小于最小长度
+    if (
+        typeof parseInt(formConfigItem.option.minLength) === 'number'
+        && value.length < parseInt(formConfigItem.option.minLength)
+    ) {
+        input_elem.focus();
+        return {
+            flag: false,
+            status: VALIDATE_STATUS.ERROR,
+            help: `${formConfigItem.title}${this.state.explainRequiredInputMinLengthTextSuffix}${formConfigItem.option.minLength}`
+        };
+    }
+    // 检查是否大于最大长度
+    if (
+        typeof parseInt(formConfigItem.option.maxLength) === 'number'
+        && value.length > parseInt(formConfigItem.option.maxLength)
+    ) {
+        input_elem.focus();
+        return {
+            flag: false,
+            status: VALIDATE_STATUS.ERROR,
+            help: `${formConfigItem.title}${this.state.explainRequiredInputMaxLengthTextSuffix}${formConfigItem.option.maxLength}`
+        };
+    }
+
     // TODO: 验证邮箱格式
 
     return true;
@@ -333,7 +364,7 @@ function validatePasswordInput (formConfigItem, value) {
         return {
             flag: false,
             status: VALIDATE_STATUS.ERROR,
-            help: `${formConfigItem.title}${this.state.explainRequiredInputMaxLengthTextSuffix}${formConfigItem.option.minLength}`
+            help: `${formConfigItem.title}${this.state.explainRequiredInputMaxLengthTextSuffix}${formConfigItem.option.maxLength}`
         };
     }
     return true;
