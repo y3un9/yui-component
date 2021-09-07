@@ -200,18 +200,45 @@ Descriptions.prototype.renderHorizontalList = function () {
 
         } else {
 
+            // /** 当前列所期望占的列数 */
+            // var itemSpan = parseInt(item.span, 10);
+            // if (itemSpan) {
+
+            //     var enoughColumn = columnCanPlaced - itemSpan;
+
+            //     // 当前剩余列数是否足够放置期望的列数
+            //     if (enoughColumn >= 0) {
+            //         colSpan = enoughColumn;
+            //     } else {
+            //         colSpan = columnCanPlaced;
+            //     }
+            // }
+
             /** 当前列所期望占的列数 */
-            var itemSpan = parseInt(item.span, 10);
-            if (itemSpan) {
-
-                var enoughColumn = columnCanPlaced - itemSpan;
-
-                // 当前剩余列数是否足够放置期望的列数
-                if (enoughColumn >= 0) {
-                    colSpan = enoughColumn;
-                } else {
-                    colSpan = columnCanPlaced;
+            var itemSpan = Number.parseInt(item.span, 10);
+            // 未配置列数
+            if (Number.isNaN(itemSpan)) {
+                // 期望占默认列数
+                itemSpan = defaultColSpan;
+            } 
+            // 已配置列数
+            else {
+                // 小于等于 0 就隐藏此列
+                if (itemSpan <= 0) {
+                    itemSpan = 0;
                 }
+                // 显示 1 列或更多的列
+            }
+
+            var enoughColumn = columnCanPlaced - itemSpan;
+            // 当前剩余列数是否足够放置期望的列数
+            // 刚好足够放或者有余裕
+            if (enoughColumn >= 0) {
+                colSpan = itemSpan;
+            } 
+            // 不够放
+            else {
+                colSpan = columnCanPlaced;
             }
 
         }
@@ -306,18 +333,45 @@ Descriptions.prototype.renderVerticalList = function () {
 
         } else { 
             
+            // /** 当前列所期望占的列数 */
+            // var itemSpan = parseInt(item.span, 10);
+            // if (itemSpan) {
+
+            //     var enoughColumn = columnCanPlaced - itemSpan;
+
+            //     // 当前剩余列数是否足够放置期望的列数
+            //     if (enoughColumn >= 0) {
+            //         colSpan = enoughColumn;
+            //     } else {
+            //         colSpan = columnCanPlaced;
+            //     }
+            // }
+
             /** 当前列所期望占的列数 */
-            var itemSpan = parseInt(item.span, 10);
-            if (itemSpan) {
-
-                var enoughColumn = columnCanPlaced - itemSpan;
-
-                // 当前剩余列数是否足够放置期望的列数
-                if (enoughColumn >= 0) {
-                    colSpan = enoughColumn;
-                } else {
-                    colSpan = columnCanPlaced;
+            var itemSpan = Number.parseInt(item.span, 10);
+            // 未配置列数
+            if (Number.isNaN(itemSpan)) {
+                // 期望占默认列数
+                itemSpan = defaultColSpan;
+            } 
+            // 已配置列数
+            else {
+                // 小于等于 0 就隐藏此列
+                if (itemSpan <= 0) {
+                    itemSpan = 0;
                 }
+                // 显示 1 列或更多的列
+            }
+
+            var enoughColumn = columnCanPlaced - itemSpan;
+            // 当前剩余列数是否足够放置期望的列数
+            // 刚好足够放或者有余裕
+            if (enoughColumn >= 0) {
+                colSpan = itemSpan;
+            } 
+            // 不够放
+            else {
+                colSpan = columnCanPlaced;
             }
 
         }
