@@ -52,7 +52,11 @@ FixedTable.prototype.render = function () {
          * @param {Object} item 列数据对象
          */
         function (item) {
-            tableTemplate += self.renderTableHeadColumn(item);
+            if (item.sortable === true) {
+                tableTemplate += self.renderTableHeadColumnSortable(item);
+            } else {
+                tableTemplate += self.renderTableHeadColumn(item);
+            }
             colGroupTemplate += 
                 '<col style="width:' + item.width + ';">';
         }
