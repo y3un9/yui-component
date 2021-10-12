@@ -63,20 +63,40 @@ function renderPlainText (data) {
  * @returns {string}
  */
 function renderTextInput (data) {
+    // // @deprecated 2021/10/12 当 value 或者 placeholder 值中包含双引号 '"', 那么字符串模板合并后元素插入到文档中会出现问题
+    // // 比如 value 被赋值 {"asd":123}, 那么拼接后模板字符串是 value="{"asd":123}", 插入文档时会认作 「 value="{" 」 「 asd":123}" 」
+    // var template = `
+    //     <input
+    //         class="form-control"
+    //         name="${data.key}"
+    //         type="text"
+    //         value="${data.value || ''}"
+    //         minlength="${(data.option || {}).minLength || ''}"
+    //         maxlength="${(data.option || {}).maxLength || ''}"
+    //         placeholder="${(data.option || {}).placeholder || data.title || ''}"
+    //         autocomplete="off"
+    //         ${data.disabled ? 'disabled' : ''}
+    //     />
+    // `;
+    // return template;
+
     var template = `
         <input
             class="form-control"
             name="${data.key}"
             type="text"
-            value="${data.value || ''}"
+            value=""
             minlength="${(data.option || {}).minLength || ''}"
             maxlength="${(data.option || {}).maxLength || ''}"
-            placeholder="${(data.option || {}).placeholder || data.title || ''}"
+            placeholder=""
             autocomplete="off"
             ${data.disabled ? 'disabled' : ''}
         />
     `;
-    return template;
+    var inputElem = util.parseDOM(template)[0];
+    inputElem.setAttribute('value', data.value || data.default || '');
+    inputElem.setAttribute('placeholder', (data.option || {}).placeholder || data.title || '');
+    return util.getOuterHTML(inputElem);
 }
 /**
  * @function renderNumberInput

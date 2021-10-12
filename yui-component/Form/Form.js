@@ -157,7 +157,6 @@ function Form (selector) {
     this.state = {
         /** @type {Array<FormItem>} */
         formConfigs: [],
-        formData: {},
         explainRequiredTextSuffix: '不能为空',
         explainRequiredInputTextPrefix: '请填写',
         explainRequiredInputTextSuffix: '为必填项',
@@ -404,20 +403,48 @@ Form.prototype.initTransfer = function () {
  * @method reset
  */
 Form.prototype.reset = function () {
+    var self = this;
+
     this.formElem.reset();
 
-    this.setFormData(this.state.formConfigs.reduce(function (previous, item, index, array) {
+    // // @deprecated 2021/10/12 一次性将所有表单项赋值, 赋值时基于执行此函数的一整个 formConfigs
+    // this.setFormData(this.state.formConfigs.reduce(function (previous, item, index, array) {
+    //     var value = '';
+    //     // if (item.hasOwnProperty('value')) {
+    //     //     value = item['value'];
+    //     // }
+    //     if (item.hasOwnProperty('default')) {
+    //         value = item['default'];
+    //     }
+    //     return Object.assign({}, previous, {
+    //         [item.key]: value
+    //     });
+    // }, {}));
+
+    // 针对每一个表单项赋值时始终基于每个表单项的最新对象 !!!
+    // 应用的场景是: 此处针对所有表单项按顺序重新赋值, 前面的表单项值改变时可能会触发 "后面未执行到的表单项" 默认值重新赋值, 
+    // 所以执行到后面默认值已被改变的表单项来重新赋值时, 需要取到最新的表单项对象
+    this.state.formConfigs.forEach(function (item, index, array) {
         var value = '';
-        // if (item.hasOwnProperty('value')) {
-        //     value = item['value'];
+        // // @deprecated 2021/10/12 需要重新从 formConfigs 取最新的每个表单项值, 否则与上面无异
+        // if (item.hasOwnProperty('default')) {
+        //     value = item['default'];
         // }
-        if (item.hasOwnProperty('default')) {
-            value = item['default'];
+        var formConfigItem = util.getTargetItemFromArrayByKey(
+            self.state.formConfigs,
+            item.key,
+            'key'
+        );
+        if (
+            formConfigItem
+            && formConfigItem.hasOwnProperty('default')
+        ) {
+            value = formConfigItem['default'];
         }
-        return Object.assign({}, previous, {
+        self.setFormData({
             [item.key]: value
         });
-    }, {}));
+    });
 }
 /**
  * 提交表单
@@ -483,6 +510,110 @@ Form.prototype.validateFormItem = function (formConfigItem, formData) {
         return false;
     } else {
         return true;
+    }
+}
+Form.prototype.setFormSubmitting = function (flag) {
+    var self = this;
+    if (flag) {
+        if (this.resetBtnElem) {
+            this.resetBtnElem.setAttribute('disabled', '');
+        }
+        if (this.submitBtnElem) {
+            this.submitBtnElem.classList.add('btn-loading');
+        }
+        this.state.formConfigs.forEach(function (item, index, array) {
+            var formControlElems = self.querySelectorAll(`*[name="${item.key}"]`);
+            Array.prototype.forEach.call(formControlElems, function (elem, index, array) {
+                elem.setAttribute('disabled', '');
+            });
+        });
+    } else {
+        if (this.resetBtnElem) {
+            this.resetBtnElem.removeAttribute('disabled');
+        }
+        if (this.submitBtnElem) {
+            this.submitBtnElem.removeAttribute('disabled', '');
+        }
+        this.state.formConfigs.forEach(function (item, index, array) {
+            var formControlElems = self.querySelectorAll(`*[name="${item.key}"]`);
+            if ([
+                'Radio',
+                'Checkbox'
+            ].includes(item.type)) {
+                var { option: { options = [] } } = item;
+                Array.prototype.forEach.call(formControlElems, function (elem, index, array) {
+                    if (item.disabled) {
+                        return;
+                    }
+                    var targetOption = util.getTargetItemFromArrayByKey(options, elem.value, 'value');
+                    if (
+                        targetOption
+                        && targetOption.disabled
+                    ) {
+                        return;
+                    }
+                    elem.removeAttribute('disabled');
+                });
+                return;
+            }
+            Array.prototype.forEach.call(formControlElems, function (elem, index, array) {
+                if (!item.disabled) {
+                    elem.removeAttribute('disabled');
+                }
+            });
+        });
+    }
+}
+Form.prototype.setFormDisabled = function (flag) {
+    var self = this;
+    if (flag) {
+        if (this.resetBtnElem) {
+            this.resetBtnElem.setAttribute('disabled', '');
+        }
+        if (this.submitBtnElem) {
+            this.submitBtnElem.classList.remove('btn-loading');
+        }
+        this.state.formConfigs.forEach(function (item, index, array) {
+            var formControlElems = self.querySelectorAll(`*[name="${item.key}"]`);
+            Array.prototype.forEach.call(formControlElems, function (elem, index, array) {
+                elem.setAttribute('disabled', '');
+            });
+        });
+    } else {
+        if (this.resetBtnElem) {
+            this.resetBtnElem.removeAttribute('disabled');
+        }
+        if (this.submitBtnElem) {
+            this.submitBtnElem.removeAttribute('disabled', '');
+        }
+        this.state.formConfigs.forEach(function (item, index, array) {
+            var formControlElems = self.querySelectorAll(`*[name="${item.key}"]`);
+            if ([
+                'Radio',
+                'Checkbox'
+            ].includes(item.type)) {
+                var { option: { options = [] } } = item;
+                Array.prototype.forEach.call(formControlElems, function (elem, index, array) {
+                    if (item.disabled) {
+                        return;
+                    }
+                    var targetOption = util.getTargetItemFromArrayByKey(options, elem.value, 'value');
+                    if (
+                        targetOption
+                        && targetOption.disabled
+                    ) {
+                        return;
+                    }
+                    elem.removeAttribute('disabled');
+                });
+                return;
+            }
+            Array.prototype.forEach.call(formControlElems, function (elem, index, array) {
+                if (!item.disabled) {
+                    elem.removeAttribute('disabled');
+                }
+            });
+        });
     }
 }
 /**
