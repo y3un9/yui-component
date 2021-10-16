@@ -56,7 +56,13 @@ function getTextInput (formConfigItem) {
 function getNumberInput (formConfigItem) {
     var formControlElem = this.formElem.querySelector(`input[name="${formConfigItem.key}"]`);
     if (formControlElem) {
-        return Number.parseFloat(formControlElem.value);
+         // return Number.parseFloat(formControlElem.value);
+        var valueStr = formControlElem.value;
+        if (valueStr.length === 0) {
+            return '';
+        } else {
+            return Number.parseFloat(formControlElem.value);
+        }
     } else {
         return '';
     }

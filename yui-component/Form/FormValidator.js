@@ -146,23 +146,27 @@ function validateNumberInput (formConfigItem, value) {
     // 表单项需要检查非空
     if (
         formConfigItem.required 
+        // && value.length === 0
+        && typeof value === 'string'
         && value.length === 0
     ) {
         input_elem.focus();
         return {
             flag: false,
-            stauts: VALIDATE_STATUS.ERROR,
+            status: VALIDATE_STATUS.ERROR,
             help: `${formConfigItem.title}${this.state.explainRequiredInputTextSuffix}`
         };
     }
 
     // 表单项非空情况下, 表单项值为空
-    if (value.length === 0) {
+    if (
+        typeof value === 'string'
+        && value.length === 0
+    ) {
         return true;
     }
     // 表单项检查是否数字
-    var numberValue = Number.parseFloat(value);
-    if (Number.isNaN(numberValue)) {
+    if (Number.isNaN(value)) {
         return {
             flag: false,
             status: VALIDATE_STATUS.ERROR,
@@ -177,11 +181,10 @@ function validateNumberInput (formConfigItem, value) {
     ) {
         return true;
     }
-
     // 检查是否小于最小值
     if (
         typeof Number.parseFloat(formConfigItem.option.min) === 'number'
-        && numberValue < Number.parseFloat(formConfigItem.option.min)
+        && value < Number.parseFloat(formConfigItem.option.min)
     ) {
         input_elem.focus();
         return {
@@ -193,7 +196,7 @@ function validateNumberInput (formConfigItem, value) {
     // 检查是否大于最大值
     if (
         typeof Number.parseFloat(formConfigItem.option.max) === 'number'
-        && numberValue > Number.parseFloat(formConfigItem.option.max)
+        && value > Number.parseFloat(formConfigItem.option.max)
     ) {
         input_elem.focus();
         return {
