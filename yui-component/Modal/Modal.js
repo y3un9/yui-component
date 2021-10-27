@@ -6,6 +6,10 @@
 
 import Component from '../Component';
 
+import './Modal.css';
+
+import util from '../../../util';
+
 /**
  * @constructor 模态框组件
  * @extends Component
@@ -19,6 +23,12 @@ function Modal (selector) {
 }
 Modal.prototype = Object.create(Component.prototype);
 Modal.prototype.constructor = Modal;
+/**
+ * @method init
+ */
+Modal.prototype.init = function () {
+    
+}
 /**
  * @method hide
  */
