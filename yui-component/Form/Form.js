@@ -164,6 +164,7 @@ function Form (selector) {
         explainRequiredInputMaxLengthTextSuffix: '最大长度为',
         explainRequiredNumberMinTextSuffix: '小于最小值',
         explainRequiredNumberMaxTextSuffix: '大于最大值',
+        explainRequiredNumberIntegerTextSuffix: '必须是整数',
         explainRequiredSelectTextPrefix: '请选择',
         explainRequiredSelectTextSuffix: '为必选项',
 

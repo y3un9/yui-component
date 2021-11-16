@@ -205,6 +205,18 @@ function validateNumberInput (formConfigItem, value) {
             help: `${formConfigItem.title}${this.state.explainRequiredNumberMaxTextSuffix}${formConfigItem.option.max}`
         };
     }
+    // 检查是否必须整数
+    if (
+        formConfigItem.option.isInteger === true
+        && !Number.isInteger(value)
+    ) {
+        input_elem.focus();
+        return {
+            flag: false,
+            status: VALIDATE_STATUS.ERROR,
+            help: `${formConfigItem.title}${explainRequiredNumberIntegerTextSuffix}`
+        };
+    }
     return true;
 }
 
